@@ -1,0 +1,15 @@
+export const SMARTLINK_DEFAULTS = {
+  business_name: 'SmartLink',
+  owner_name: 'Admin',
+  phone: '+911234567890',
+  email: 'support@smartlink.com',
+  whatsapp_number: '+911234567890',
+  google_maps_link: 'https://maps.google.com',
+  upi_id: 'smartlink@upi',
+  youtube_link: 'https://youtube.com',
+  google_review_link: 'https://google.com/reviews',
+  website: undefined,
+  instagram: undefined,
+  facebook: undefined,
+  logo_url: undefined,
+} as const;
