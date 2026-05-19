@@ -10,19 +10,72 @@ import { errorMiddleware } from './middlewares/error.middleware';
 
 const app = express();
 
-app.use(
-  cors({
-    origin: 'https://smartlink-fe-kmm6.vercel.app',
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
+/*
+|--------------------------------------------------------------------------
+| CORS CONFIG
+|--------------------------------------------------------------------------
+*/
 
-// IMPORTANT
-app.options('*', cors());
+const corsOptions = {
+  origin: 'https://smartlink-fe-kmm6.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: [
+    'Origin',
+    'X-Requested-With',
+    'Content-Type',
+    'Accept',
+    'Authorization',
+  ],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+/*
+|--------------------------------------------------------------------------
+| MANUAL CORS HEADERS
+|--------------------------------------------------------------------------
+*/
+
+app.use((req, res, next) => {
+  res.header(
+    'Access-Control-Allow-Origin',
+    'https://smartlink-fe-kmm6.vercel.app'
+  );
+
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+  );
+
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+
+  res.header('Access-Control-Allow-Credentials', 'true');
+
+  // HANDLE PREFLIGHT REQUEST
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+/*
+|--------------------------------------------------------------------------
+| SECURITY
+|--------------------------------------------------------------------------
+*/
 
 app.use(helmet());
+
+/*
+|--------------------------------------------------------------------------
+| RATE LIMIT
+|--------------------------------------------------------------------------
+*/
 
 app.use(
   rateLimit({
@@ -33,15 +86,42 @@ app.use(
   })
 );
 
+/*
+|--------------------------------------------------------------------------
+| BODY PARSER
+|--------------------------------------------------------------------------
+*/
+
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+/*
+|--------------------------------------------------------------------------
+| HEALTH CHECK
+|--------------------------------------------------------------------------
+*/
+
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok' });
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+  });
 });
+
+/*
+|--------------------------------------------------------------------------
+| ROUTES
+|--------------------------------------------------------------------------
+*/
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/qr', qrRoutes);
+
+/*
+|--------------------------------------------------------------------------
+| ERROR HANDLER
+|--------------------------------------------------------------------------
+*/
 
 app.use(errorMiddleware);
 
