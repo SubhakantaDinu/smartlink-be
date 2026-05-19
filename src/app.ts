@@ -11,30 +11,7 @@ const app = express();
 
 app.use(helmet());
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5173',
-  'http://localhost:5173',
-];
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (curl, Postman, mobile apps)
-      if (!origin) return callback(null, true);
-      // In development, allow all ngrok/tunnel origins
-      if (
-        process.env.NODE_ENV !== 'production' ||
-        allowedOrigins.includes(origin) ||
-        origin.endsWith('.ngrok-free.app') ||
-        origin.endsWith('.ngrok.io')
-      ) {
-        return callback(null, true);
-      }
-      callback(new Error(`CORS blocked: ${origin}`));
-    },
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use(
   rateLimit({
