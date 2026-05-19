@@ -1,9 +1,9 @@
 export const SMARTLINK_DEFAULTS = {
   business_name: 'SmartLink',
   owner_name: 'Admin',
-  phone: '+911234567890',
-  email: 'support@smartlink.com',
-  whatsapp_number: '+911234567890',
+  phone: '+919437610573',
+  email: 'smartbyteinbox@gmail.com',
+  whatsapp_number: '+919437610573',
   google_maps_link: 'https://maps.google.com',
   upi_id: 'smartlink@upi',
   youtube_link: 'https://youtube.com',
