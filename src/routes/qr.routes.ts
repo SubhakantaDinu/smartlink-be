@@ -13,7 +13,7 @@ router.post('/', qrController.create);
 router.get('/', qrController.getAll);
 router.get('/:id', qrController.getById);
 router.put('/:id', qrController.update);
-router.patch('/:id/status', qrController.toggleStatus);
+router.put('/:id/status', qrController.toggleStatus);
 router.delete('/:id', qrController.remove);
 
 export default router;
